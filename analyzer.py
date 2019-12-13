@@ -18,7 +18,7 @@ import sys
 
 """
 This program will take a .csv file of Airbnb listings as input, analyze
-the sentiments of all the reviews for each given listing, and then ourput
+the sentiments of all the reviews for each given listing, and then output
 various forms of data (csv as well as visualization of the most frequently
 mentioned features within those reviews).
 
@@ -148,8 +148,8 @@ def main():
                     ss = sid.polarity_scores(comment)
 
                     """ 
-                        We classify neutral (0) reviews as positive since manual analysis of tweets indicate that neutrally classified comments 
-                        simply used 'neutral language' to praise a listing as opposed to the sentiments actually being neutral
+                    We classify neutral (0) reviews as positive since manual analysis of tweets indicate that neutrally classified comments 
+                    simply used 'neutral language' to praise a listing as opposed to the sentiments actually being neutral
                     """
                     # If the comment is negative, place it in the negative comments list and update the sentiment score of the overall listing
                     if ss["compound"] < 0:
@@ -166,8 +166,8 @@ def main():
                         sentiment_score += ss["compound"]
 
                     """
-                        Now that the comment's overall sentiment is generated, we can break down the comment to
-                        extract features and the sentiments about those features
+                    Now that the comment's overall sentiment is generated, we can break down the comment to
+                    extract features and the sentiments about those features
                     """
 
                     # Define a noun phrase as a phrase matching the earlier regex pattern
@@ -246,6 +246,7 @@ def main():
             sentiment_score = sentiment_score / (
                 len(positive_comments_list) + len(negative_comments_list)
             )
+
         sentiment_dict[listing_id] = {
             "positive_comments": positive_comments_list,
             "negative_comments": negative_comments_list,
