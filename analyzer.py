@@ -17,6 +17,7 @@ import matplotlib.font_manager
 import seaborn as sns
 import argparse
 import sys
+import os
 
 """
 This program will take a .csv file of Airbnb listings as input, analyze
@@ -37,54 +38,19 @@ By Kashif Khan
 
 def main():
 
-    try:
-        # Parse the command line arguments and extract the input variables
-        parser = argparse.ArgumentParser()
-        parser.add_argument(
-            "source_file", type=str
-        )  # The location of the reviews input file
-        parser.add_argument("output_type", type=int)
-        parser.add_argument("range", nargs="?", type=str, default="")
+    # Parse over the arguments and load the appropriate data into a dataframe
+    df, args = initialize_program()
 
-        args = parser.parse_args()
-
-        # Load the source file as a dataframe
-        df = pd.read_csv(args.source_file)[["listing_id", "comments"]]
-
-        # Determine the form of the output and ensure it's a valid option
-        if args.output_type not in range(1, 6):
-            raise Exception
-
-        # Determine whether there is any restriction on listing ids by the user
-        if args.range == "":
-            pass
-        elif ":" in args.range and args.range[0] == "[" and args.range[-1] == "]":
-            df_lower = int(args.range.split(":")[0][1:])
-            df_upper = int(args.range.split(":")[1][:-1])
-            df = df.loc[df_lower:df_upper]
-        elif "," in args.range and args.range[0] == "[" and args.range[-1] == "]":
-            listings = [int(i) for i in args.range[1:-1].split(",")]
-            df = df.loc[df["listing_id"].isin(listings)]
-        elif "," not in args.range and args.range[0] == "[" and args.range[-1] == "]":
-            listings = [int(i) for i in [args.range[1:-1]]]
-            df = df.loc[df["listing_id"].isin(listings)]
-        else:
-            raise Exception
-
-    except Exception as e:
-        print(
-            "Please enter valid arguments, i.e: python analyzer.py data/reviews.csv 1 [0:1000]"
-        )
-        print("If unsure, please refer to the README for valid arguments.")
-        sys.exit()
-
-    # nltk.download("stopwords")
-    # nltk.download('vader_lexicon')
-    # set(stopwords.words("english"))
     print("====== Starting Analysis ======")
 
-    # Initialize the sentiment analyzer object
-    sid = SentimentIntensityAnalyzer()
+    try:
+        # Initialize the sentiment analyzer object
+        sid = SentimentIntensityAnalyzer()
+    except Exception as identifier:
+        # If an error is thrown, it means we must download the NLTK lexicon
+        "No NLTK lexicon detected... downloading appropriate files now"
+        nltk.download("stopwords")
+        nltk.download("vader_lexicon")
 
     # Update the VADER lexicon with words that indicate positive/negative emotions as observed/needed
     sid.lexicon.update(
@@ -301,6 +267,66 @@ def main():
     df.to_csv("listings_ranked.csv", index=False)
 
     print("--- Complete ---")
+
+
+## This function will parse the input arguments and return a parser, as well as generate a 'results' folder where
+## the optional graphs and adjectives .csv files will be stored
+def initialize_program():
+
+    # First ensure the arguments are valid and parse over them
+    try:
+        # Parse the command line arguments and extract the input variables
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            "source_file", type=str
+        )  # The location of the reviews input file
+        parser.add_argument("output_type", type=int)
+        parser.add_argument("range", nargs="?", type=str, default="")
+
+        args = parser.parse_args()
+
+        # Load the source file as a dataframe
+        df = pd.read_csv(args.source_file)[["listing_id", "comments"]]
+
+        # Determine the form of the output and ensure it's a valid option
+        if args.output_type not in range(1, 6):
+            raise Exception
+
+        # Determine whether there is any restriction on listing ids by the user
+        if args.range == "":
+            pass
+        elif ":" in args.range and args.range[0] == "[" and args.range[-1] == "]":
+            df_lower = int(args.range.split(":")[0][1:])
+            df_upper = int(args.range.split(":")[1][:-1])
+            df = df.loc[df_lower:df_upper]
+        elif "," in args.range and args.range[0] == "[" and args.range[-1] == "]":
+            listings = [int(i) for i in args.range[1:-1].split(",")]
+            df = df.loc[df["listing_id"].isin(listings)]
+        elif "," not in args.range and args.range[0] == "[" and args.range[-1] == "]":
+            listings = [int(i) for i in [args.range[1:-1]]]
+            df = df.loc[df["listing_id"].isin(listings)]
+        else:
+            raise Exception
+
+    except Exception as e:
+        print(e)
+        print(
+            "Please enter valid arguments, i.e: python analyzer.py data/reviews_chicago.csv 1 [0:1000]"
+        )
+        print("If unsure, please refer to the README for valid arguments.")
+        sys.exit()
+
+    # Now attempt to create a 'results' folder
+    try:
+        if not os.path.exists("results"):
+            os.makedirs("results")
+    except Exception as identifier:
+        print(
+            "Unable to create '/results' folder. Please make sure a 'results' folder exists in the main program directory."
+        )
+        sys.exit()
+
+    return df, args
 
 
 # This helper function generates a bar-graph of the top 20 most frequently mentioned nouns/features
