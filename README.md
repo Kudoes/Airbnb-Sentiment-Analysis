@@ -107,4 +107,4 @@ Secondly, we can extract the **features** that are referred to as being positive
 
 The data used in this tool was retrieved from http://insideairbnb/get-the-data.html. Any similar file can be used in this program, as long as it contains "listing_id" and "comments" columns. The specific files that will work with this tool as is are the 'Detailed Review Listings for X city' files, as shown below:
 
-![insideairbnb/get-the-data.html](insideairbnb_example.png)
+![insideairbnb/get-the-data.html](https://github.com/Kudoes/Airbnb-Sentiment-Analysis/blob/master/misc/insideairbnb_example.png)
