@@ -1,0 +1,10 @@
+### requirements.txt for analyzer.py ###
+# Simply run pip install -r requirements.txt to install requirements
+langdetect
+wordcloud
+pandas
+nltk
+numpy
+matplotlib
+seaborn
+argparse
