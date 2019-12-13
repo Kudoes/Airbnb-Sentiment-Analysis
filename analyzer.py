@@ -1,11 +1,13 @@
 import csv
 import pandas as pd
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import nltk
+from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords  # stopwords to detect language
 from nltk import word_tokenize  # function to split up our words
 from nltk import RegexpTokenizer
 import re
-import pandas as pd
+import string
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from collections import Counter
 from langdetect import detect
 import numpy as np
