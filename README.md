@@ -14,13 +14,11 @@ This is the final project for CS 410 at UIUC. Created by Kashif Khan.
 <a name="purpose"></a>
 ## Purpose
 
-The purpose of this tool is to analyze large amounts of Airbnb reviews stored in a csv file and use them to generate a **sentiment score** for each listing indicating the overall sentiments expressed in all the reviews for that particular listing. 
+The purpose of this tool is to use the large amounts of Airbnb reviews provided as input to generate a **sentiment score** for each Airbnb listing. Then, all of the listings will be ranked in descending order of score with the most positively reviewed listings at the top and the most negatively reviewed listings at the bottom. Each listing will be assigned a sentiment score between [-1, 1]. Anything below 0 is classified as **negative** and anything above 0 is classified as **positive**.
 
-Furthermore, it will then attempt to extract the most popular features (identified as nouns) expressed on a per-listing basis, as well as the adjectives that appear alongside it. These features and adjectives are seperated based on their sentiment. This way, users can easily see the most frequent features referenced in a positive sense, as well as the most frequent features referenced by reviewers in a negative sense.
+Furthermore, the tool can then attempt to extract the most popular features (identified as nouns) mentioned in the reviews on a per-listing basis, as well as the adjectives that appear alongside them. These features and adjectives are extracted from the comments of each listing and then seperated based on their sentiment. This way, users can easily see the most frequent features referenced by reviewers in a **positive** sense, as well as the most frequent features referenced in a **negative** sense.
 
-For example, if all the reviews for a listing with an id of 1050 are provided in a csv file, this tool will generate a sentiment polarity score between -1 and 1. Anything below 0 is classified as **negative** and anything above 0 is classified as **positive**.
-
-After classifying the listing as positive/negative, this program can also generate graphs and tables about the features of each listing that are either positive/negative:
+Lastly, this program can also generate bar graphs, wordclouds and csv files about the features of each listing that are either positive/negative:
 
 1.  **Bar graphs** that highlight the frequency of features mentioned in a positive/negative sense.
 
@@ -105,6 +103,8 @@ Secondly, we can extract the **features** that are referred to as being positive
 <a name="datasource"></a>
 ## Source of Data
 
-The data used in this tool was retrieved from http://insideairbnb/get-the-data.html. Any similar file can be used in this program, as long as it contains "listing_id" and "comments" columns. The specific files that will work with this tool as is are the 'Detailed Review Listings for X city' files, as shown below:
+The data used in this tool was retrieved from http://insideairbnb.com/get-the-data.html. 
 
-![insideairbnb/get-the-data.html](https://github.com/Kudoes/Airbnb-Sentiment-Analysis/blob/master/misc/insideairbnb_example.png)
+The specific files that will work with this tool as is are the 'Detailed Review Listings for X city' files, as shown below. Any similar input file can be used in this program, as long as it contains the "listing_id" and "comments" columns.
+
+![insideairbnb.com/get-the-data.html](https://github.com/Kudoes/Airbnb-Sentiment-Analysis/blob/master/misc/insideairbnb_example.png)
