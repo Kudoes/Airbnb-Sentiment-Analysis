@@ -6,9 +6,10 @@ This is the final project for CS 410 at UIUC. Created by Kashif Khan.
 
 1. [ Purpose ](#purpose)
 2. [ Installation ](#installation)
-3. [ Examples of Runtime Arguments ](#examples)
-4. [ Background ](#background)
-5. [ Source of Data ](#datasource)
+3. [ Run the Program ](#execution)
+4. [ Examples of Runtime Arguments ](#examples)
+5. [ Background ](#background)
+6. [ Source of Data ](#datasource)
 
 <a name="purpose"></a>
 ## Purpose
@@ -36,34 +37,44 @@ After classifying the listing as positive/negative, this program can also genera
 <a name="installation"></a>
 ## Installation
 
-(install instructions)
+Before running the program, we need to install the libraries required. To do so, simply run the following command in the main directory:
+
+```pip install -r requirements.txt```
+
+This will automatically install the libraries defined within the requirements file.
+
+<a name="execution"></a>
+## Run the Program
+
+To run the program, the following commands will work:
 
   ```python analyzer.py source_file output_type listing_id_restrictions```
   
 Bold indicates **mandatory** arguments while italic indicates _optional_ arguments.
 
-**source_file**: The location of the input csv file. This must be a .csv file with **at least** two columns with exact names 'listing_id' and 'comments'.
+1. **source_file**: The location of the input csv file. This must be a .csv file with **at least** two columns with exact names 'listing_id' and 'comments'.
 
-**output_type**: Indicates what kind of output the user desires. Valid options are as follows:
+2. **output_type**: Indicates what kind of output the user desires. Valid options are as follows:
 
-   1. listings_ranked.csv file
+   1. **'1':** listings_ranked.csv file
    
-   2. listings_ranked.csv file + bar graphs
+   2. **'2':** listings_ranked.csv file + bar graphs
    
-   3. listings_ranked.csv file + nouns & adjectives .csv files
+   3. **'3':** listings_ranked.csv file + nouns & adjectives .csv files
    
-   4. listings_ranked.csv file + positive/negative feature word clouds
+   4. **'4':** listings_ranked.csv file + positive/negative feature word clouds
    
-   5. All of the above
+   5. **'5:'** All the above
    
-_listing_id_restrictions_: Indicates which listing id's in particular are to be used. Added as an option since some input files have hundreds of thousands of listings and generating graphs for all of them could eat up disk space quickly. Valid options are as follows:
-  1. **blank**: Leaving the third argument blank will mean that all listing ids in the file are to be used.
+3. **listing_id_restrictions** (Optional): Indicates which listing id's in particular are to be used. Added as an option since some input files could have up to hundreds of thousands of listings and generating graphs for all of them could quickly consume disk space. Valid options are as follows:
   
-  2. **[x,y,z,...]**: Comma-separated listing ids inside square brackets. Only these specific listing ids will be used for analysis.
+    1. **blank**: Leaving the third argument blank will mean that all listing ids in the file are to be used.
   
-  3. **[x:y]**: A range of rows to use in the analysis from the input file.
+    2. **[x,y,z,...]**: Comma-separated listing ids inside square brackets. Only these specific listing ids will be used for analysis.
+  
+    3. **[x:y]**: A range of rows to use in the analysis from the input file.
       
-      a. For example, [0:100] would only use the first 100 rows/reviews in the input file.
+        a. For example, [0:100] would only use the first 100 rows/reviews in the input file.
       
 <a name="examples"></a>
 ### Examples of Runtime Arguments
@@ -94,4 +105,6 @@ Secondly, we can extract the **features** that are referred to as being positive
 <a name="datasource"></a>
 ## Source of Data
 
-The data used in this tool was retrieved from http://insideairbnb.com/. Any similar file can be used in this program, as long as it contains "listing_id" and "comments" columns.
+The data used in this tool was retrieved from http://insideairbnb/get-the-data.html. Any similar file can be used in this program, as long as it contains "listing_id" and "comments" columns. The specific files that will work with this tool as is are the 'Detailed Review Listings for X city' files, as shown below:
+
+![insideairbnb/get-the-data.html](insideairbnb_example.png)
