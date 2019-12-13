@@ -23,15 +23,16 @@ After classifying the listing as positive/negative, this program can also genera
 
 1.  **Bar graphs** that highlight the frequency of features mentioned in a positive/negative sense.
 
-                                                   ![Example of Bargraph](http://)
+![Example of Bargraph](https://github.com/Kudoes/Airbnb-Sentiment-Analysis/blob/master/misc/example_bargraph.png)
 
 2. **Wordclouds** that visually highlight the most frequently occurring words in a positive/negative sense.
 
-                                                   ![Example of Bargraph](http://)
+![Example of Wordcloud](https://github.com/Kudoes/Airbnb-Sentiment-Analysis/blob/master/misc/example_wordcloud.png)
 
 3. **CSV files** that show the number of times each noun was mentioned as well as providing a list of adjectives that were associated with the extracted features.
 
-                                                   ![Example of Bargraph](http://)
+![Example of Noun+Adjectives csv](https://github.com/Kudoes/Airbnb-Sentiment-Analysis/blob/master/misc/example_csv.png)
+
 <a name="installation"></a>
 ## Installation
 
