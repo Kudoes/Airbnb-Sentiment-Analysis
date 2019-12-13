@@ -70,7 +70,7 @@ _listing_id_restrictions_: Indicates which listing id's in particular are to be 
 
 ```python analyzer.py data/reviews_chicago.csv 1 [25269, 37738, 46151]```
 
-This will use **data/reviews_chicago.csv** as the input file and generate **only** the listings_ranked.csv file.
+This will use **data/reviews_chicago.csv** as the input file and generate **only** the listings_ranked.csv file for the listings with ids 25269, 37738 and 46151.
 
 ```python analyzer.py data/reviews_boston.csv 5```
 
