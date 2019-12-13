@@ -7,9 +7,10 @@ This is the final project for CS 410 at UIUC. Created by Kashif Khan.
 1. [ Background and Purpose ](#background)
 2. [ Implementation ](#implementation)
 3. [ Installation ](#installation)
-4. [ Run the Program ](#execution)
-5. [ Examples of Runtime Arguments ](#examples)
-6. [ Source of Data ](#datasource)
+4. [ Contents ](#contents) 
+5. [ Run the Program ](#execution)
+6. [ Examples of Runtime Arguments ](#examples)
+7. [ Source of Data ](#datasource)
 
 <a name="background"></a>
 ## Background and Purpose
@@ -32,7 +33,7 @@ Next, we may want to extract the **features** that are referred to as being posi
 
 This tool utilizes the large amounts of Airbnb reviews provided as input to generate a **sentiment score** for each Airbnb listing. Then, all of the listings will be ranked in descending order of score with the most positively reviewed listings at the top and the most negatively reviewed listings at the bottom of an output csv file. Each listing will be assigned a sentiment score between [-1, 1]. Anything below 0 is classified as **negative** and anything above 0 is classified as **positive**.
 
-Furthermore, the tool can then extract the most popular features (identified as nouns) mentioned in the reviews on a per-listing basis, as well as the adjectives that appear alongside them. These features and adjectives are extracted from the comments of each listing and then seperated based on their sentiment. This way, users can easily see the most frequent features referenced by reviewers in a **positive** sense, as well as the most frequent features referenced in a **negative** sense.
+Furthermore, the tool will then extract the most popular features (identified as nouns) mentioned in the reviews on a per-listing basis, as well as the adjectives that appear alongside them. These features and adjectives are extracted from the comments of each listing and then seperated based on their sentiment. This way, users can easily see the most frequent features referenced by reviewers in a **positive** sense, as well as the most frequent features referenced in a **negative** sense.
 
 ### Data Cleaning
 
@@ -42,14 +43,14 @@ Before any sentiment scores are generated, we clean the data by removing null ro
 To generate the sentiment score for each review/noun phrase, the NLTK lexicon-based [VADER sentiment analysis tool](http://www.nltk.org/howto/sentiment.html) is used. The benefit of using this tool is that it has specifically been designed to identify sentiments expressed in social media. The features in particular that I found most applicable to Airbnb comments were that it accounts for common acronyms expressed in social media, as well as adjusting sentiment based on capitalization and punctuation (i.e., "BAD!!" would have a much lower polarity than "bad").
 
 ### POS Tagging and Noun Chunk Sentiment Analysis
-Once the overall review sentiment score is generated, we utilize the [NLTK](https://www.nltk.org/book/ch07.html) library once again to identify noun and adjective associations within the review. First, we tokenize the comment and use POS-tagging to tag each word in the review. Then, the regex is used as a rule to define a noun chunk as any sequence of words that satisfy that requirement. For example, this requirement could be: <Adjective><Noun>. Once these noun chunks are identified, we once again use the VADER sentiment analyzer to classify each noun as being referenced in a positive or negative sense. The adjectives extracted are crucial in this step as they provide most of the sentiment information. These adjectives are stored alongside each noun for reference.
+Once the overall review sentiment score is generated, we utilize the [NLTK](https://www.nltk.org/book/ch07.html) library once again to identify noun and adjective associations within the review. First, we tokenize the comment and use POS-tagging to tag each word in the review. Then, a regex is used as a rule to define a noun chunk as any sequence of words that satisfy that regex requirement. For example, this requirement could be: \<Adjective\>\<Noun\>. Once these noun chunks are identified, we once again use the VADER sentiment analyzer on each noun phrase to classify each noun as being referenced in a positive or negative sense. The adjectives extracted are crucial in this step as they provide most of the sentiment information. These adjectives are stored alongside each noun for reference.
   
-These nouns are treated as the **features** of the listing that people are discussing. 
+These nouns are treated as the **features** of the listing that reviewers are discussing. 
   
 ### Data Generation
 Finally, the data is accumulated and can then be visualized or exported as a csv file.
 
-One output file is always generated: listings_ranked.csv. This file contains all the listings specified at runtime and ranks them based on an overall sentiment score. The most well-reviewed listings will be at the top, and the most poorly-reviewed listings will be at the bottom. 
+One output file is _always_ generated: listings_ranked.csv. This file contains all the listings specified at runtime and ranks them based on an overall sentiment score. The most well-reviewed listings will be at the top, and the most poorly-reviewed listings will be at the bottom. 
 
 Furthermore, this program can generate optional bar graphs, wordclouds and csv files about the features of each listing that are either positive/negative:
 
@@ -65,10 +66,26 @@ Furthermore, this program can generate optional bar graphs, wordclouds and csv f
 
 ![Example of Noun+Adjectives csv](https://github.com/Kudoes/Airbnb-Sentiment-Analysis/blob/master/misc/example_csv.png)
 
+The listings_ranked.csv file will be generated in the root directory, and the other files will all be placed in a /results subfolder.
+
+<a name="contents"></a>
+## Contents of Repository
+This repository has a few components:
+
+1. **analyzer.py**: This is the main python program that users will run through the command line.
+
+2. **requirements.txt**: This is a requirements file for pip to easily download all required libraries.
+
+3. **/misc/ folder**: This folder can be ignored as it holds img files for this README only.
+
+4. **/data/ folder**: This folder is intended to hold the input files. A demo file has been provided reviews_chicago.csv.
+
+5. **/results/ folder**: This folder will be generated upon program execution. All graphs and the noun+adjective.csv files will be placed here.
+
 <a name="installation"></a>
 ## Installation
 
-To run this program, first this repository must be cloned locally:
+To run this program, this repository must be cloned locally:
 
 ```
 $ git clone https://github.com/Kudoes/Airbnb-Sentiment-Analysis.git
@@ -87,10 +104,8 @@ This will automatically install the libraries defined within the requirements fi
 To run the program, the following commands will work:
 
   ```python analyzer.py source_file output_type listing_id_restrictions```
-  
-Bold indicates **mandatory** arguments while italic indicates _optional_ arguments.
 
-1. **source_file**: The location of the input csv file. This must be a .csv file with **at least** two columns with exact names 'listing_id' and 'comments'.
+1. **source_file**: The location of the input file. This must be a .csv file with **at least** two columns with exact names 'listing_id' and 'comments'. A default test input is provided in /data/reviews_chicago.csv.
 
 2. **output_type**: Indicates what kind of output the user desires. Valid options are as follows:
 
