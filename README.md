@@ -4,21 +4,54 @@ This is the final project for CS 410 at UIUC. Created by Kashif Khan.
 
 ## Table of Contents
 
-1. [ Purpose ](#purpose)
-2. [ Installation ](#installation)
-3. [ Run the Program ](#execution)
-4. [ Examples of Runtime Arguments ](#examples)
-5. [ Background ](#background)
+1. [ Background and Purpose ](#background)
+2. [ Implementation ](#implementation)
+3. [ Installation ](#installation)
+4. [ Run the Program ](#execution)
+5. [ Examples of Runtime Arguments ](#examples)
 6. [ Source of Data ](#datasource)
 
+<a name="background"></a>
+## Background and Purpose
+
+When we look at customer reviews for products or services, we can notice two things:
+
+1. There exists an _overall_ sentiment expressed by the reviewer.
+2. There exist sentiments expressed towards certain features of the product/service that are independent of the overall sentiment of the entire comment.
+
+Essentially, not all aspects of a positive review are positive, and not all aspects of a negative review are negative. This is also true for Airbnb reviews. For example, a review could say:
+
+> I thoroughly enjoyed my time here. The location was amazing and the apartment was clean. The only small complaint I had was that the room was cold at night and we had to use multiple blankets. Otherwise, it was an excellent stay!
+
+We can see that the above comment is generally positive. However, there is a negative sentiment expressed about the room being cold at night. Thus, by classifying all the comments of a listing as either positive/negative (on a scale, not just binary classification as 1 or 0), we can get a good idea of how well-regarded a listing is by reviewers through their comments. 
+
+Next, we may want to extract the **features** that are referred to as being positive or negative for various analytical purposes either by customers or owners of the listing. This is the purpose for which I've developed this tool.
+
 <a name="purpose"></a>
-## Purpose
+## Implementation
 
-The purpose of this tool is to use the large amounts of Airbnb reviews provided as input to generate a **sentiment score** for each Airbnb listing. Then, all of the listings will be ranked in descending order of score with the most positively reviewed listings at the top and the most negatively reviewed listings at the bottom. Each listing will be assigned a sentiment score between [-1, 1]. Anything below 0 is classified as **negative** and anything above 0 is classified as **positive**.
+This tool utilizes the large amounts of Airbnb reviews provided as input to generate a **sentiment score** for each Airbnb listing. Then, all of the listings will be ranked in descending order of score with the most positively reviewed listings at the top and the most negatively reviewed listings at the bottom of an output csv file. Each listing will be assigned a sentiment score between [-1, 1]. Anything below 0 is classified as **negative** and anything above 0 is classified as **positive**.
 
-Furthermore, the tool can then attempt to extract the most popular features (identified as nouns) mentioned in the reviews on a per-listing basis, as well as the adjectives that appear alongside them. These features and adjectives are extracted from the comments of each listing and then seperated based on their sentiment. This way, users can easily see the most frequent features referenced by reviewers in a **positive** sense, as well as the most frequent features referenced in a **negative** sense.
+Furthermore, the tool can then extract the most popular features (identified as nouns) mentioned in the reviews on a per-listing basis, as well as the adjectives that appear alongside them. These features and adjectives are extracted from the comments of each listing and then seperated based on their sentiment. This way, users can easily see the most frequent features referenced by reviewers in a **positive** sense, as well as the most frequent features referenced in a **negative** sense.
 
-Lastly, this program can also generate bar graphs, wordclouds and csv files about the features of each listing that are either positive/negative:
+### Data Cleaning
+
+Before any sentiment scores are generated, we clean the data by removing null rows and reviews that are not in English (to the best of our ability) by utilizing the pandas and [langdetect](https://pypi.org/project/langdetect/) libraries.
+
+### NLTK VADER Sentiment Tool
+To generate the sentiment score for each review/noun phrase, the NLTK lexicon-based [VADER sentiment analysis tool](http://www.nltk.org/howto/sentiment.html) is used. The benefit of using this tool is that it has specifically been designed to identify sentiments expressed in social media. The features in particular that I found most applicable to Airbnb comments were that it accounts for common acronyms expressed in social media, as well as adjusting sentiment based on capitalization and punctuation (i.e., "BAD!!" would have a much lower polarity than "bad").
+
+### POS Tagging and Noun Chunk Sentiment Analysis
+Once the overall review sentiment score is generated, we utilize the [NLTK](https://www.nltk.org/book/ch07.html) library once again to identify noun and adjective associations within the review. First, we tokenize the comment and use POS-tagging to tag each word in the review. Then, the regex is used as a rule to define a noun chunk as any sequence of words that satisfy that requirement. For example, this requirement could be: <Adjective><Noun>. Once these noun chunks are identified, we once again use the VADER sentiment analyzer to classify each noun as being referenced in a positive or negative sense. The adjectives extracted are crucial in this step as they provide most of the sentiment information. These adjectives are stored alongside each noun for reference.
+  
+These nouns are treated as the **features** of the listing that people are discussing. 
+  
+### Data Generation
+Finally, the data is accumulated and can then be visualized or exported as a csv file.
+
+One output file is always generated: listings_ranked.csv. This file contains all the listings specified at runtime and ranks them based on an overall sentiment score. The most well-reviewed listings will be at the top, and the most poorly-reviewed listings will be at the bottom. 
+
+Furthermore, this program can generate optional bar graphs, wordclouds and csv files about the features of each listing that are either positive/negative:
 
 1.  **Bar graphs** that highlight the frequency of features mentioned in a positive/negative sense.
 
@@ -35,9 +68,16 @@ Lastly, this program can also generate bar graphs, wordclouds and csv files abou
 <a name="installation"></a>
 ## Installation
 
+To run this program, first this repository must be cloned locally:
+
+```
+$ git clone https://github.com/Kudoes/Airbnb-Sentiment-Analysis.git
+$ cd Airbnb-Sentiment-Analysis
+```
+
 Before running the program, we need to install the libraries required. To do so, simply run the following command in the main directory:
 
-```pip install -r requirements.txt```
+```$ pip install -r requirements.txt```
 
 This will automatically install the libraries defined within the requirements file.
 
@@ -68,7 +108,7 @@ Bold indicates **mandatory** arguments while italic indicates _optional_ argumen
   
     1. **blank**: Leaving the third argument blank will mean that all listing ids in the file are to be used.
   
-    2. **[x,y,z,...]**: Comma-separated listing ids inside square brackets. Only these specific listing ids will be used for analysis.
+    2. **[x,y,z,...]**: Comma-separated listing ids inside square brackets. Only these specific listing ids will be used for analysis. **Important: do not add spaces between listing ids!**
   
     3. **[x:y]**: A range of rows to use in the analysis from the input file.
       
@@ -77,7 +117,7 @@ Bold indicates **mandatory** arguments while italic indicates _optional_ argumen
 <a name="examples"></a>
 ### Examples of Runtime Arguments
 
-```python analyzer.py data/reviews_chicago.csv 1 [25269, 37738, 46151]```
+```python analyzer.py data/reviews_chicago.csv 1 [25269,37738,46151]```
 
 This will use **data/reviews_chicago.csv** as the input file and generate **only** the listings_ranked.csv file for the listings with ids 25269, 37738 and 46151.
 
@@ -88,17 +128,6 @@ This will use **data/reviews_boston.csv** as the input file and generate the lis
 ```python analyzer.py data/reviews_seattle.csv 2 [1000:2000]```
       
 This will use **data/reviews_seattle.csv** as the input file and generate only the listings_ranked.csv file and the bar graphs for **only** the listings on rows 1000 - 2000 of the input file.
-      
-<a name="background"></a>
-## Background
-
-Not all aspects of a positive review are positive, and not all aspects of a negative review are negative. This is true especially for Airbnb reviews. For example, a review could say:
-
-> I thoroughly enjoyed my time here. The location was amazing and the apartment was clean. The only small complaint I had was that the room was cold at night and we had to use multiple blankets. Otherwise, it was an excellent stay!
-
-We can intuitively see that the above comment is generally positive. Thus, by classifying all the comments of a listing as either positive/negative (on a scale, not just binary classification as 1 or 0), we can get a good idea of how well-regarded a listing is by reviewers. 
-
-Secondly, we can extract the **features** that are referred to as being positive or negative. My tool utilizes POS-tagging and noun phrase extraction to identify nouns and adjectives associated with that noun within each review. In general, we will consider nouns to be the features that we are extracting and the adjectives will provide us with **context** about that feature. Then, we will analyze the sentiments of each noun phrase to identify whether the noun is positive or negative and then classify it as so.
 
 <a name="datasource"></a>
 ## Source of Data
