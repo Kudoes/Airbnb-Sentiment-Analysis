@@ -132,17 +132,17 @@ To run the program, the following commands will work:
 <a name="examples"></a>
 ### Examples of Runtime Arguments
 
-```python analyzer.py data/reviews_chicago.csv 5 [25269,37738,46151]```
+```python analyzer.py data/reviews_chicago.csv 1 [25269,37738,46151]```
 
-This will use **data/reviews_chicago.csv** as the input file and generate **only** the listings_ranked.csv file for the listings with ids 25269, 37738 and 46151.
+This will use **data/reviews_chicago.csv** as the input file to generate the listings_ranked.csv file, the bar graphs, the wordclouds and the noun+adjectives csv files for the listings with ids 25269, 37738 and 46151.
 
 ```python analyzer.py data/reviews_chicago.csv 1```
 
-This will use **data/reviews_chicago.csv** as the input file and generate the listings_ranked.csv file, the bar graphs, the wordclouds and the adjectives csv files for **all** listings provided in the input file.
+This will use **data/reviews_chicago.csv** as the input file to generate **only** the listings_ranked.csv file for **all** listings provided in the input file.
 
 ```python analyzer.py data/reviews_chicago.csv 2 [1000:2000]```
       
-This will use **data/reviews_chicago.csv** as the input file and generate only the listings_ranked.csv file and the bar graphs for **only** the listings on rows 1000 - 2000 of the input file.
+This will use **data/reviews_chicago.csv** as the input file to generate only the listings_ranked.csv file and the bar graphs for **only** the listings on rows 1000 - 2000 of the input file.
 
 <a name="datasource"></a>
 ## Source of Data
