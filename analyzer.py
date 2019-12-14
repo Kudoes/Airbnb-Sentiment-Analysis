@@ -375,7 +375,7 @@ def generate_bar_graph(sent_df, listing_id, sentiment):
         # plt.show(fig)
         # plt.autoscale()
         plt.savefig(
-            "results/{}_noun_frequency_graph_{}.png".format(listing_id, sentiment),
+            "results/{}_noun_bar_graph_{}.png".format(listing_id, sentiment),
             bbox_inches="tight",
         )
         plt.cla()
