@@ -6,9 +6,9 @@ This is the final project for CS 410 at UIUC. Created by Kashif Khan.
 
 1. [ Background and Purpose ](#background)
 2. [ Implementation ](#implementation)
-3. [ Installation ](#installation)
-4. [ Contents ](#contents) 
-5. [ Run the Program ](#execution)
+3. [ Contents ](#contents) 
+4. [ Installation ](#installation)
+5. [ Running the Program ](#execution)
 6. [ Examples of Runtime Arguments ](#examples)
 7. [ Source of Data ](#datasource)
 
@@ -99,7 +99,7 @@ Before running the program, we need to install the libraries required. To do so,
 This will automatically install the libraries defined within the requirements file.
 
 <a name="execution"></a>
-## Run the Program
+## Running the Program
 
 To run the program, the following commands will work:
 
@@ -132,7 +132,7 @@ To run the program, the following commands will work:
 <a name="examples"></a>
 ### Examples of Runtime Arguments
 
-```python analyzer.py data/reviews_chicago.csv 1 [25269,37738,46151]```
+```python analyzer.py data/reviews_chicago.csv 5 [25269,37738,46151]```
 
 This will use **data/reviews_chicago.csv** as the input file to generate the listings_ranked.csv file, the bar graphs, the wordclouds and the noun+adjectives csv files for the listings with ids 25269, 37738 and 46151.
 
