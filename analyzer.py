@@ -69,9 +69,6 @@ def main():
     # Remove all NaN values from the dataframe
     df = df[pd.notnull(df["comments"])]
 
-    # Initialize the tokenizer with the regex used to tokenize the comment
-    tokenizer = RegexpTokenizer(r"\w+")
-
     # Read in the data from the dataframe into a dictionary grouped by listing id as keys
     base_dict = dict(tuple(df.groupby("listing_id")))
 
@@ -241,7 +238,7 @@ def main():
                 # If there is any data to show, generate a .csv file
                 if len(sent_df.index.values.tolist()) > 0:
                     sent_df.to_csv(
-                        "results/{}_{}_nouns_and_adjectives.csv".format(
+                        "results/{}_nouns_and_adjectives_{}.csv".format(
                             listing_id, sentiment.split("_")[0]
                         )
                     )
@@ -378,7 +375,7 @@ def generate_bar_graph(sent_df, listing_id, sentiment):
         # plt.show(fig)
         # plt.autoscale()
         plt.savefig(
-            "results/{}_{}_noun_frequency_graph.png".format(listing_id, sentiment),
+            "results/{}_noun_frequency_graph_{}.png".format(listing_id, sentiment),
             bbox_inches="tight",
         )
         plt.cla()
@@ -412,7 +409,7 @@ def generate_wordcloud(sentiment_dict, listing_id, sentiment_name):
         plt.imshow(wordcloud, interpolation="bilinear")
         plt.axis("off")
         plt.savefig(
-            "results/{}_{}_wordcloud.png".format(
+            "results/{}_wordcloud_{}.png".format(
                 listing_id, sentiment_name.split("_")[0]
             )
         )
