@@ -43,14 +43,8 @@ def main():
 
     print("====== Starting Analysis ======")
 
-    try:
-        # Initialize the sentiment analyzer object
-        sid = SentimentIntensityAnalyzer()
-    except Exception as identifier:
-        # If an error is thrown, it means we must download the NLTK lexicon
-        "No NLTK lexicon detected... downloading appropriate files now"
-        nltk.download("stopwords")
-        nltk.download("vader_lexicon")
+    # Initialize the sentiment analyzer object
+    sid = SentimentIntensityAnalyzer()
 
     # Update the VADER lexicon with words that indicate positive/negative emotions as observed/needed
     sid.lexicon.update(
@@ -270,7 +264,20 @@ def main():
 ## the optional graphs and adjectives .csv files will be stored
 def initialize_program():
 
-    # First ensure the arguments are valid and parse over them
+    # Ensure all the proper NLTK packages are downloaded correctly
+    try:
+        nltk.data.find("tokenizers/punkt")
+        nltk.data.find("corpora/stopwords")
+        nltk.data.find("sentiment/vader_lexicon.zip")
+        nltk.data.find("taggers/averaged_perceptron_tagger")
+    except Exception as e:
+        print("Could not find all required NLTK modules. Downloading now...")
+        nltk.download("punkt")
+        nltk.download("averaged_perceptron_tagger")
+        nltk.download("stopwords")
+        nltk.download("vader_lexicon")
+
+    # Ensure the arguments are valid and parse over them
     try:
         # Parse the command line arguments and extract the input variables
         parser = argparse.ArgumentParser()
@@ -335,8 +342,6 @@ def generate_bar_graph(sent_df, listing_id, sentiment):
     if len(sent_df.index.values.tolist()) > 0:
 
         fig, ax = plt.subplots(figsize=(12, 6))
-        plt.rcParams["font.sans-serif"] = "Arial"
-        plt.rcParams["font.family"] = "sans-serif"
         plt.rcParams["text.color"] = "#000000"
         plt.rcParams["axes.labelcolor"] = "#000000"
         plt.rcParams["xtick.color"] = "#000000"
@@ -375,7 +380,7 @@ def generate_bar_graph(sent_df, listing_id, sentiment):
         # plt.show(fig)
         # plt.autoscale()
         plt.savefig(
-            "results/{}_noun_bar_graph_{}.png".format(listing_id, sentiment),
+            "results/{}_bar_graph_{}.png".format(listing_id, sentiment),
             bbox_inches="tight",
         )
         plt.cla()
