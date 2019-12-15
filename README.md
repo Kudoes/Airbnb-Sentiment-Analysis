@@ -85,6 +85,16 @@ This repository has a few components:
 <a name="installation"></a>
 ## Installation
 
+### System Requirements
+The only requirements needed to run this program:
+
+1. Windows / MacOS / Linux (Ubuntu) operating system
+  
+    a. This code was tested on all three of these operating systems
+  
+2. Python 3.6+: This program was developed on Python 3.7 and tested successfully on Python 3.6.
+
+### Installation
 To run this program, this repository must be cloned locally:
 
 ```
