@@ -26,7 +26,11 @@ Essentially, not all aspects of a positive review are positive, and not all aspe
 
 We can see that the above comment is generally positive. However, there is a negative sentiment expressed about the room being cold at night. Thus, by classifying all the comments of a listing as either positive/negative (on a scale, not just binary classification as 1 or 0), we can get a good idea of how well-regarded a listing is by reviewers through their comments. 
 
-Next, we may want to extract the **features** that are referred to as being positive or negative for various analytical purposes either by customers or owners of the listing. This is the purpose for which I've developed this tool.
+Next, we may want to extract the **features** that are referred to as being positive or negative for various analytical purposes either by customers or owners of the listing. 
+
+In particular, sometimes users may want to see _specifically_ the negative aspects of an Airbnb listing that they are going to stay at. In general most comments on Airbnb are positive, so it is usually more interesting to inspect what the problems with a location are and whether they would be something critical for us as customers. By extracting features, we can easily see the problems that people had with multiple listings without having to manually go through every single comment to search for negative aspects.
+
+This is the purpose for which I've developed this tool - to make it much easier for Airbnb customers to compare and contrast the multiple listings in order to determine the best fit for them.
 
 <a name="purpose"></a>
 ## Implementation
@@ -40,7 +44,7 @@ Furthermore, the tool will then extract the most popular features (identified as
 Before any sentiment scores are generated, we clean the data by removing null rows and reviews that are not in English (to the best of our ability) by utilizing the pandas and [langdetect](https://pypi.org/project/langdetect/) libraries.
 
 ### NLTK VADER Sentiment Tool
-To generate the sentiment score for each review/noun phrase, the NLTK lexicon-based [VADER sentiment analysis tool](http://www.nltk.org/howto/sentiment.html) is used. The benefit of using this tool is that it has specifically been designed to identify sentiments expressed in social media. The features in particular that I found most applicable to Airbnb comments were that it accounts for common acronyms expressed in social media, as well as adjusting sentiment based on capitalization and punctuation (i.e., "BAD!!" would have a much lower polarity than "bad").
+To generate the sentiment score for each review/noun phrase, the NLTK lexicon-based [VADER sentiment analysis tool](http://www.nltk.org/howto/sentiment.html) is used. The benefit of using this tool is that it has specifically been designed to identify sentiments expressed in social media. The features in particular that I found most applicable to Airbnb comments were that it accounts for common acronyms expressed in social media, as well as adjusting sentiment based on capitalization and punctuation (i.e., "BAD!!" would have a much lower polarity than "bad"). Due to the informal nature of Airbnb comments, they are usually phrased similarly to social media text and thus this module was perfect for my requirements.
 
 ### POS Tagging and Noun Chunk Sentiment Analysis
 Once the overall review sentiment score is generated, we utilize the [NLTK](https://www.nltk.org/book/ch07.html) library once again to identify noun and adjective associations within the review. First, we tokenize the comment and use POS-tagging to tag each word in the review. Then, a regex is used as a rule to define a noun chunk as any sequence of words that satisfy that regex requirement. For example, this requirement could be: \<Adjective\>\<Noun\>. Once these noun chunks are identified, we once again use the VADER sentiment analyzer on each noun phrase to classify each noun as being referenced in a positive or negative sense. The adjectives extracted are crucial in this step as they provide most of the sentiment information. These adjectives are stored alongside each noun for reference.
@@ -48,7 +52,7 @@ Once the overall review sentiment score is generated, we utilize the [NLTK](http
 These nouns are treated as the **features** of the listing that reviewers are discussing. 
   
 ### Data Generation
-Finally, the data is accumulated and can then be visualized or exported as a csv file.
+Finally, the data is accumulated and can then be visualized or exported as a csv file. For this, the matplotlib, seaborn and wordcloud libraries are used.
 
 One output file is _always_ generated: listings_ranked.csv. This file contains all the listings specified at runtime and ranks them based on an overall sentiment score. The most well-reviewed listings will be at the top, and the most poorly-reviewed listings will be at the bottom. 
 
